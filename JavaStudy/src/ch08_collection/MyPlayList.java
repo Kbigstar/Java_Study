@@ -2,12 +2,17 @@ package ch08_collection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
-public class PlayListMain {
+
+
+public class MyPlayList {
 	
 	
 	public static void main(String[] args) {
+		
 		ArrayList<String> playList = new ArrayList<>(Arrays.asList("비의 랩소디:임재현", "Perfect Night:LE SSERAFIM (르세라핌)",
 				"To. X:태연 (TAEYEON)", "Drama:aespa", "사랑은 늘 도망가:임영웅", "첫 눈:EXO", "헤어지자 말해요:박재정", "인사:범진", "에피소드:이무진",
 				"Do or Die:임영웅", "모래 알갱이:임영웅", "Seven (feat. Latto) - Clean Ver.:정국", "우리들의 블루스:임영웅",
@@ -34,79 +39,133 @@ public class PlayListMain {
 				"I Love My Body:화사 (HWASA)", "기다릴게:PLAVE", "Yes or No:정국", "Snowman:Sia",
 				"편지 한 장 (부제: 서른에 만난 첫 세상) (A letter):김호중", "I Just Love Ya:PLAVE"));
 		
-		ArrayList<String> searchList = SearchSong("가수", "임영웅", playList);
-		System.out.println(searchList);
-		System.out.println("곡 개수 : " + searchList.size());
-		ArrayList<String> searchList2 = SearchSong("제목", "사랑", playList);
-		System.out.println(searchList2);
-		System.out.println("포함 제목 수 : " + searchList2.size());
 		
-		// 사용자에게 1. 가수 or 제목을 입력받고 / 종료(q)
-				//		  2. 검색 키워드를 입력받아
-				//		  3. 순위와 노래제목:가수를 순서대로 출력하시오 (한줄한줄)
-				//		  4. 없으면 ... 아쉽지만 검색 결과가 없습니다..
-				Scanner scan = new Scanner(System.in);
-//				ArrayList<String> searchList3 = new ArrayList<String>();  
-				String select = "";
-				String keyword = "";
-				
+		
+		
+		// 1. 가수와 노래리스트를 1줄에 5개씩 출력
+		// 2. 좋아하는 가수 이름을 입력받기 
+		// 3. 해당 가수의 노래리스트 출력 (순번도)
+		// 4. 저장하고 싶은 노래의 순번을 입력받아 userMap에 저장
+		// 5. 현재까지 저장된 노래를 출력
+
+		Scanner scan = new Scanner(System.in);
+		HashMap<String, ArrayList<String>> userMap = new HashMap<>();
+		ArrayList<String> userPlayList = new ArrayList<String>();
+		
+		while(true) {
+			
+		System.out.println("======== 나만의 플레이리스트 ========");
+		System.out.println("고객님의 닉네임을 입력해주세요");
+		System.out.print(">>> ");
+		String userNm = scan.nextLine();
+
+		int size = 0;
+		if(userMap.containsKey(userNm)) {
+			size = userMap.get(userNm).size();
+		}
+		
+		
+		HashSet<String> singer = new HashSet<>();
+		for(int i = 0; i < playList.size(); i++) {
+			String [] temp = playList.get(i).split(":");
+							
+				singer.add(temp[1]);
+
+		}
+		
+		int sCount = 0;
+		for(String s: singer) {
+			System.out.print(s + ", ");
+			if (sCount % 4 == 0 && sCount != 0) {
+				System.out.print("\n");
+			}
+			sCount++;
+	
+		}
+		
+		while(true) {
+			System.out.println();
+			System.out.println("가수를 입력해주세요 (종료 : q)");
+			System.out.print(">>> ");
+			String	userSelect = scan.nextLine();
+			searchSong(userSelect, playList);
+
+			if (userSelect.equals("q")) {
+				break;
+			}
+			
 				while(true) {
-					System.out.print("가수 or 제목을 입력하세요 (종료:q) : ");
-					select = scan.nextLine();
-					if (select.equals("q")) {
-						System.out.println("종료합니다..");
-						break;
-					}
-					System.out.print("검색 키워드를 입력하세요 (종료:q) : ");
-					keyword = scan.nextLine();
-					if (keyword.equals("q")) {
+					
+					System.out.println("어떤 노래를 저장하시나요? (종료: q)");
+					System.out.print(">>> ");
+					String	userSong = scan.nextLine();
+					
+					if (userSong.equals("q")) {
 						break;
 					}
 					
-				
-					
-					ArrayList<String> searchList3 = SearchSong(select, keyword, playList);
-					
-					System.out.println(searchList3);
+					searchSong(userSelect, playList, Integer.parseInt(userSong), userPlayList);
+					System.out.println("ddd"+ userPlayList);
+				}
+			}
+		}
+		
+	}
+	
+	
+	public static void searchSong(String nm, ArrayList<String> arr) {
+		
+		ArrayList<String> result = new ArrayList<>();
+		int index = 1;
+		for(int i = 0; i < arr.size(); i++) {
+
+			String [] temp = arr.get(i).split(":");
+			
+			if (temp[1].contains(nm)) {
+				result.add((index)+"번 "+arr.get(i));
+				index++;
+				}
+			}
+		
+		for(String s: result) {
+			System.out.println(s.replace(":"+nm, ""));
+		}
+			
+	}
+	
+	public static void searchSong(
+			String nm, ArrayList<String> arr, int userNum, ArrayList<String> strArr) {
+		
+		ArrayList<String> result = new ArrayList<>();
+		int index = 1;
+		for(int i = 0; i < arr.size(); i++) {
+
+			String [] temp = arr.get(i).split(":");
+			
+			
+			
+			if (temp[1].contains(nm)) {
+				result.add((index)+"번 "+arr.get(i));
+				if (index == userNum) {
+	
+					System.out.println(result);
+					strArr = new ArrayList<String>(result);
+					 System.out.println(strArr);
+					break;
 				}
 				
-			}
-			
-			
-			// input : 1. 가수 or 노래, 2. 키워드, 3. 리스트
-			// output: 리스트
-			
-			public static ArrayList<String> SearchSong(String option, String keyword, ArrayList<String> arr) {
-				
-				ArrayList<String> result = new ArrayList<>();
-				
-				for(int i = 0; i < arr.size(); i++) {
-					// : 을 기준으로 자르기 0 제목, 1 가수
-					String [] temp = arr.get(i).split(":");
-					String tmp = Integer.toString(i+1);
-					
-					if (option.equals("가수")) {
-						if (temp[1].contains(keyword)) {
-							result.add(arr.get(i));
-						}
-						
-					}
-					else if(option.equals("제목")) {
-						if (temp[0].contains(keyword)) {
-							result.add(tmp);
-							result.add(arr.get(i));
-							
-							result.add("\n");
-							
-							
-						}
-						
-						
-					}
+				index++;
 				}
-				
-				return result;
 			}
+		
+		for(String s: result) {
+			System.out.println(s.replace(":"+nm, ""));
+		}
+		
+		
+
+			
+	}
 	
 	
 }
