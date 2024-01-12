@@ -33,7 +33,7 @@ public class Result05 {
 		String [] tmp = new String[nameList.length];
 		
 		for(int i = 0; i < nameList.length; i++) {
-			if(nameList[i].startsWith(firstName) && (nameList[i].startsWith(firstName)) != false ) {
+			if(nameList[i].startsWith(firstName)) {
 				tmp[count] = nameList[i]; 
 				count++;
 				
