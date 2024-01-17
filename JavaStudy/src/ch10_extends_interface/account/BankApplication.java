@@ -18,7 +18,7 @@ public class BankApplication {
 			
 			int selectNum = Integer.parseInt(scan.nextLine());
 			if (selectNum == 1) {
-				// 계좌 생성 메소드
+				// 계좌 생성 
 				System.out.print("계좌번호 : ");
 				String bankNum = scan.nextLine();
 				
@@ -36,7 +36,7 @@ public class BankApplication {
 				
 			}
 			else if(selectNum == 2) {
-				// 계좌 목록 출력 메소드
+				// 계좌 목록 출력
 				for(int i = 0; i < accountArr.length; i++) {
 					if (accountArr[i] != null ) {
 						System.out.println(accountArr[i]);
@@ -44,7 +44,7 @@ public class BankApplication {
 				}
 			}
 			else if(selectNum == 3) {
-				// 예금 메소드
+				// 예금 
 				System.out.println("--------");
 				System.out.println("예금");
 				System.out.println("--------");
@@ -93,4 +93,8 @@ public class BankApplication {
 		}
 		System.out.print("프로그램 종료");
 	}
+	
+	
+		
+	
 }
